@@ -1,0 +1,379 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------ */
+/* Nova AI design tokens — cosmic dark default, light theme overrides. */
+/* ------------------------------------------------------------------ */
+@theme {
+  --color-void: #06060c;
+  --color-cosmos: #0b0b16;
+  --color-surface: #121222;
+  --color-surface-2: #1a1a30;
+  --color-hairline: rgba(150, 160, 255, 0.14);
+  --color-hairline-strong: rgba(150, 160, 255, 0.28);
+  --color-ink: #ececf6;
+  --color-mist: #a3a6c2;
+  --color-mist-dim: #7b7e9c;
+  --color-accent: #8b5cf6;
+  --color-accent-2: #6366f1;
+  --color-accent-3: #3b82f6;
+  --color-danger: #f87171;
+  --color-success: #34d399;
+  --color-code-bg: #0d0d1b;
+
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue",
+    "Noto Sans", "Noto Sans Sinhala", "Noto Sans Tamil", "Iskoola Pota", "Latha",
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    "Noto Sans Mono", monospace;
+}
+
+/* Light theme: same tokens, softer values. */
+:root[data-theme="light"] {
+  --color-void: #f4f4fb;
+  --color-cosmos: #ffffff;
+  --color-surface: #ffffff;
+  --color-surface-2: #eef0fa;
+  --color-hairline: rgba(80, 90, 180, 0.16);
+  --color-hairline-strong: rgba(80, 90, 180, 0.32);
+  --color-ink: #1b1c2e;
+  --color-mist: #565a78;
+  --color-mist-dim: #7d81a0;
+  --color-accent: #7c3aed;
+  --color-accent-2: #4f46e5;
+  --color-accent-3: #2563eb;
+  --color-code-bg: #f0f1fa;
+}
+
+/* ------------------------------------------------------------------ */
+/* Base                                                                */
+/* ------------------------------------------------------------------ */
+html {
+  color-scheme: dark;
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-void);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* Cosmic backdrop — restrained, no distracting gradient spam. */
+.cosmic-bg {
+  background:
+    radial-gradient(1200px 500px at 85% -10%, rgba(99, 102, 241, 0.14), transparent 60%),
+    radial-gradient(900px 420px at -10% 110%, rgba(59, 130, 246, 0.1), transparent 60%),
+    var(--color-void);
+}
+:root[data-theme="light"] .cosmic-bg {
+  background:
+    radial-gradient(1200px 500px at 85% -10%, rgba(99, 102, 241, 0.08), transparent 60%),
+    radial-gradient(900px 420px at -10% 110%, rgba(59, 130, 246, 0.06), transparent 60%),
+    var(--color-void);
+}
+
+/* ------------------------------------------------------------------ */
+/* Glassmorphism — restrained blur + hairline borders                  */
+/* ------------------------------------------------------------------ */
+.glass {
+  background: color-mix(in srgb, var(--color-surface) 72%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-hairline);
+}
+
+.glass-strong {
+  background: color-mix(in srgb, var(--color-surface-2) 86%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--color-hairline);
+}
+
+/* ------------------------------------------------------------------ */
+/* Focus & motion accessibility                                        */
+/* ------------------------------------------------------------------ */
+:focus-visible {
+  outline: 2px solid var(--color-accent-2);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Animations                                                          */
+/* ------------------------------------------------------------------ */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in-up {
+  animation: fade-in-up 240ms ease-out both;
+}
+
+@keyframes pulse-dot {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  40% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+.typing-dot {
+  animation: pulse-dot 1.2s infinite ease-in-out;
+}
+.typing-dot:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.typing-dot:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* ------------------------------------------------------------------ */
+/* Scrollbars                                                          */
+/* ------------------------------------------------------------------ */
+.thin-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-hairline-strong) transparent;
+}
+.thin-scrollbar::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--color-hairline-strong);
+  border-radius: 8px;
+}
+.thin-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* ------------------------------------------------------------------ */
+/* Markdown content                                                    */
+/* ------------------------------------------------------------------ */
+.markdown {
+  font-size: 0.975rem;
+  line-height: 1.75;
+  color: var(--color-ink);
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.markdown > * + * {
+  margin-top: 0.85em;
+}
+.markdown h1,
+.markdown h2,
+.markdown h3,
+.markdown h4 {
+  font-weight: 650;
+  line-height: 1.35;
+  color: var(--color-ink);
+}
+.markdown h1 {
+  font-size: 1.4em;
+}
+.markdown h2 {
+  font-size: 1.25em;
+}
+.markdown h3 {
+  font-size: 1.1em;
+}
+.markdown ul,
+.markdown ol {
+  padding-left: 1.4em;
+}
+.markdown ul {
+  list-style: disc;
+}
+.markdown ol {
+  list-style: decimal;
+}
+.markdown li + li {
+  margin-top: 0.3em;
+}
+.markdown li > ul,
+.markdown li > ol {
+  margin-top: 0.3em;
+}
+.markdown a {
+  color: var(--color-accent-3);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.markdown blockquote {
+  border-left: 3px solid var(--color-accent-2);
+  padding-left: 1em;
+  color: var(--color-mist);
+}
+.markdown hr {
+  border: none;
+  border-top: 1px solid var(--color-hairline);
+}
+.markdown table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  width: 100%;
+}
+.markdown th,
+.markdown td {
+  border: 1px solid var(--color-hairline);
+  padding: 0.45em 0.8em;
+  text-align: left;
+}
+.markdown th {
+  background: color-mix(in srgb, var(--color-surface-2) 70%, transparent);
+  font-weight: 600;
+}
+.markdown :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.875em;
+  background: color-mix(in srgb, var(--color-accent-2) 14%, transparent);
+  border: 1px solid var(--color-hairline);
+  border-radius: 6px;
+  padding: 0.12em 0.4em;
+  overflow-wrap: break-word;
+}
+
+/* ------------------------------------------------------------------ */
+/* Code blocks + highlight.js token theme (cosmic)                     */
+/* ------------------------------------------------------------------ */
+.code-block {
+  border: 1px solid var(--color-hairline);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--color-code-bg);
+}
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-mist);
+  background: color-mix(in srgb, var(--color-surface-2) 60%, transparent);
+  border-bottom: 1px solid var(--color-hairline);
+}
+.code-block pre {
+  margin: 0;
+  padding: 0.95rem 1.1rem;
+  overflow-x: auto;
+}
+.code-block code {
+  font-family: var(--font-mono);
+  font-size: 0.83rem;
+  line-height: 1.65;
+  color: var(--color-ink);
+}
+.hljs-comment,
+.hljs-quote {
+  color: var(--color-mist-dim);
+  font-style: italic;
+}
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-type {
+  color: #c4b5fd;
+}
+.hljs-string,
+.hljs-regexp,
+.hljs-addition,
+.hljs-attribute {
+  color: #7dd3fc;
+}
+.hljs-number,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-link,
+.hljs-variable,
+.hljs-template-variable {
+  color: #fca5a5;
+}
+.hljs-title,
+.hljs-section,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-built_in {
+  color: #93c5fd;
+}
+.hljs-attr,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-meta,
+.hljs-meta .hljs-keyword {
+  color: #fdba74;
+}
+.hljs-emphasis {
+  font-style: italic;
+}
+.hljs-strong {
+  font-weight: 700;
+}
+:root[data-theme="light"] .hljs-keyword,
+:root[data-theme="light"] .hljs-selector-tag,
+:root[data-theme="light"] .hljs-literal,
+:root[data-theme="light"] .hljs-type {
+  color: #6d28d9;
+}
+:root[data-theme="light"] .hljs-string,
+:root[data-theme="light"] .hljs-regexp,
+:root[data-theme="light"] .hljs-addition {
+  color: #0369a1;
+}
+:root[data-theme="light"] .hljs-number,
+:root[data-theme="light"] .hljs-variable {
+  color: #be123c;
+}
+:root[data-theme="light"] .hljs-title,
+:root[data-theme="light"] .hljs-section,
+:root[data-theme="light"] .hljs-built_in {
+  color: #1d4ed8;
+}
+:root[data-theme="light"] .hljs-comment,
+:root[data-theme="light"] .hljs-quote {
+  color: #64748b;
+}
+:root[data-theme="light"] .hljs-attr,
+:root[data-theme="light"] .hljs-meta {
+  color: #c2410c;
+}
+
+/* ------------------------------------------------------------------ */
+/* Misc utilities                                                      */
+/* ------------------------------------------------------------------ */
+.text-gradient-nova {
+  background: linear-gradient(100deg, #a78bfa, #818cf8 45%, #60a5fa);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
